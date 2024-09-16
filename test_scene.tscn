@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=4 uid="uid://3j31mlxewlct"]
 
-[ext_resource type="PackedScene" uid="uid://e24awiqpi8xn" path="res://prototype-tile-map/prototype_tile_map.tscn" id="1_ai6tk"]
-[ext_resource type="PackedScene" uid="uid://b2wmbvatvls8e" path="res://platformer-player-controller/player.tscn" id="2_pwtyx"]
+[ext_resource type="PackedScene" uid="uid://e24awiqpi8xn" path="res://prototype_tile_map/prototype_tile_map.tscn" id="1_ai6tk"]
+[ext_resource type="PackedScene" uid="uid://b2wmbvatvls8e" path="res://platformer_player_controller/player.tscn" id="2_pwtyx"]
 
 [node name="TestScene" type="Node2D"]
 
