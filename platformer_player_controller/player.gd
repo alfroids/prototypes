@@ -12,10 +12,6 @@ extends CharacterBody2D
 @onready var state_chart: StateChart = $StateChart as StateChart
 
 
-func _physics_process(_delta: float) -> void:
-	move_and_slide()
-
-
 # IDLE STATE
 
 func _on_idle_state_entered() -> void:
@@ -23,9 +19,6 @@ func _on_idle_state_entered() -> void:
 
 
 func _on_idle_state_physics_processing(_delta: float) -> void:
-	if not is_on_floor():
-		state_chart.send_event(&"started_falling")
-
 	var input: float = Input.get_axis(&"move_left", &"move_right")
 
 	if input:
@@ -34,7 +27,8 @@ func _on_idle_state_physics_processing(_delta: float) -> void:
 		else:
 			state_chart.send_event(&"started_walking")
 
-	#velocity.x = move_toward(velocity.x, 0.0, delta * acceleration)
+	if not is_on_floor():
+		state_chart.send_event(&"started_falling")
 
 
 func _on_idle_state_unhandled_input(event: InputEvent) -> void:
@@ -45,61 +39,63 @@ func _on_idle_state_unhandled_input(event: InputEvent) -> void:
 # WALK STATE
 
 func _on_walk_state_physics_processing(_delta: float) -> void:
-	if not is_on_floor():
-		state_chart.send_event(&"started_falling")
-
 	var input: float = Input.get_axis(&"move_left", &"move_right")
 
 	if not input:
 		state_chart.send_event(&"stopped_walking")
+		return
 
-	if Input.is_action_pressed(&"run"):
-		state_chart.send_event(&"started_running")
-
-	velocity.x = input * walk_speed
+	velocity = input * walk_speed * Vector2.RIGHT
 	#velocity.x = move_toward(velocity.x, input * walk_speed, delta * acceleration)
+	move_and_slide()
+
+	if not is_on_floor():
+		state_chart.send_event(&"started_falling")
 
 
 func _on_walk_state_unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"jump"):
+	if event.is_action_pressed(&"run"):
+		state_chart.send_event(&"started_running")
+	elif event.is_action_pressed(&"jump"):
 		state_chart.send_event(&"jumped")
 
 
 # RUN STATE
 
 func _on_run_state_physics_processing(_delta: float) -> void:
-	if not is_on_floor():
-		state_chart.send_event(&"started_falling")
-
 	var input: float = Input.get_axis(&"move_left", &"move_right")
 
 	if not input:
 		state_chart.send_event(&"stopped_walking")
+		return
 
-	if not Input.is_action_pressed(&"run"):
-		state_chart.send_event(&"stopped_running")
-
-	velocity.x = input * run_speed
+	velocity = input * run_speed * Vector2.RIGHT
 	#velocity.x = move_toward(velocity.x, input * run_speed, delta * acceleration)
+	move_and_slide()
+
+	if not is_on_floor():
+		state_chart.send_event(&"started_falling")
 
 
 func _on_run_state_unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"jump"):
+	if event.is_action_released(&"run"):
+		state_chart.send_event(&"stopped_running")
+	elif event.is_action_pressed(&"jump"):
 		state_chart.send_event(&"jumped")
 
 
 # FALL STATE
 
 func _on_fall_state_physics_processing(delta: float) -> void:
-	if is_on_floor():
-		state_chart.send_event(&"landed")
+	var input: float = Input.get_axis(&"move_left", &"move_right")
+	velocity.x = input * airborne_speed
+	#velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+	move_and_slide()
 
 	velocity.y += delta * gravity
 
-	var input: float = Input.get_axis(&"move_left", &"move_right")
-
-	velocity.x = input * airborne_speed
-	#velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+	if is_on_floor():
+		state_chart.send_event(&"landed")
 
 
 func _on_fall_state_unhandled_input(event: InputEvent) -> void:
@@ -114,15 +110,15 @@ func _on_jump_state_entered() -> void:
 
 
 func _on_jump_state_physics_processing(delta: float) -> void:
-	if is_on_floor():
-		state_chart.send_event(&"landed")
+	var input: float = Input.get_axis(&"move_left", &"move_right")
+	velocity.x = input * airborne_speed
+	#velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+	move_and_slide()
 
 	velocity.y += delta * gravity
 
-	var input: float = Input.get_axis(&"move_left", &"move_right")
-
-	velocity.x = input * airborne_speed
-	#velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+	if is_on_floor():
+		state_chart.send_event(&"landed")
 
 
 func _on_jump_state_unhandled_input(event: InputEvent) -> void:
@@ -137,12 +133,12 @@ func _on_double_jump_state_entered() -> void:
 
 
 func _on_double_jump_state_physics_processing(delta: float) -> void:
-	if is_on_floor():
-		state_chart.send_event(&"landed")
+	var input: float = Input.get_axis(&"move_left", &"move_right")
+	velocity.x = input * airborne_speed
+	#velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+	move_and_slide()
 
 	velocity.y += delta * gravity
 
-	var input: float = Input.get_axis(&"move_left", &"move_right")
-
-	velocity.x = input * airborne_speed
-	#velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+	if is_on_floor():
+		state_chart.send_event(&"landed")
