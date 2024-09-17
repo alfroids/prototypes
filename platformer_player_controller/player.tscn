@@ -140,13 +140,14 @@ event = &"hit_ground"
 delay_in_seconds = "0.0"
 
 [node name="DebugMenu" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="StateChartDebugger" parent="DebugMenu" instance=ExtResource("8_flhtt")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_right = 270.0
-offset_bottom = 300.0
+offset_right = 160.0
+offset_bottom = 160.0
 grow_horizontal = 1
 grow_vertical = 1
 initial_node_to_watch = NodePath("../../StateChart")
