@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2wmbvatvls8e"]
+[gd_scene load_steps=9 format=3 uid="uid://b2wmbvatvls8e"]
 
 [ext_resource type="Texture2D" uid="uid://cppb5sf5mqqtt" path="res://platformer_player_controller/spritesheets/idle.png" id="1_h8trg"]
 [ext_resource type="Script" path="res://platformer_player_controller/player.gd" id="1_y5p2u"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="3_sjc15"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="4_hjqv8"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_tgj37"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_sm5rv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_6rya2"]
@@ -29,114 +28,128 @@ shape = SubResource("RectangleShape2D_hhecm")
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("3_sjc15")
 
-[node name="Root" type="Node" parent="StateChart"]
-script = ExtResource("4_hjqv8")
-
-[node name="GroundState" type="Node" parent="StateChart/Root"]
+[node name="Movement" type="Node" parent="StateChart"]
 script = ExtResource("5_tgj37")
 initial_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateChart/Root/GroundState"]
+[node name="Idle" type="Node" parent="StateChart/Movement"]
 script = ExtResource("6_sm5rv")
 
-[node name="To Walk" type="Node" parent="StateChart/Root/GroundState/Idle"]
+[node name="ToWalk" type="Node" parent="StateChart/Movement/Idle"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Walk")
 event = &"started_walking"
 delay_in_seconds = "0.0"
 
-[node name="To Run" type="Node" parent="StateChart/Root/GroundState/Idle"]
+[node name="ToRun" type="Node" parent="StateChart/Movement/Idle"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Run")
 event = &"started_running"
 delay_in_seconds = "0.0"
 
-[node name="Walk" type="Node" parent="StateChart/Root/GroundState"]
-script = ExtResource("6_sm5rv")
-
-[node name="To Idle" type="Node" parent="StateChart/Root/GroundState/Walk"]
-script = ExtResource("7_6rya2")
-to = NodePath("../../Idle")
-event = &"stopped_walking"
-delay_in_seconds = "0.0"
-
-[node name="To Run" type="Node" parent="StateChart/Root/GroundState/Walk"]
-script = ExtResource("7_6rya2")
-to = NodePath("../../Run")
-event = &"started_running"
-delay_in_seconds = "0.0"
-
-[node name="Run" type="Node" parent="StateChart/Root/GroundState"]
-script = ExtResource("6_sm5rv")
-
-[node name="To Idle" type="Node" parent="StateChart/Root/GroundState/Run"]
-script = ExtResource("7_6rya2")
-to = NodePath("../../Idle")
-event = &"stopped_walking"
-delay_in_seconds = "0.0"
-
-[node name="To Walk" type="Node" parent="StateChart/Root/GroundState/Run"]
-script = ExtResource("7_6rya2")
-to = NodePath("../../Walk")
-event = &"stopped_running"
-delay_in_seconds = "0.0"
-
-[node name="AirState" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_tgj37")
-initial_state = NodePath("Ground")
-
-[node name="Ground" type="Node" parent="StateChart/Root/AirState"]
-script = ExtResource("6_sm5rv")
-
-[node name="To Fall" type="Node" parent="StateChart/Root/AirState/Ground"]
+[node name="ToFall" type="Node" parent="StateChart/Movement/Idle"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Fall")
 event = &"started_falling"
 delay_in_seconds = "0.0"
 
-[node name="To Jump" type="Node" parent="StateChart/Root/AirState/Ground"]
+[node name="ToJump" type="Node" parent="StateChart/Movement/Idle"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Jump")
 event = &"jumped"
 delay_in_seconds = "0.0"
 
-[node name="Fall" type="Node" parent="StateChart/Root/AirState"]
+[node name="Walk" type="Node" parent="StateChart/Movement"]
 script = ExtResource("6_sm5rv")
 
-[node name="To Ground" type="Node" parent="StateChart/Root/AirState/Fall"]
+[node name="ToIdle" type="Node" parent="StateChart/Movement/Walk"]
 script = ExtResource("7_6rya2")
-to = NodePath("../../Ground")
-event = &"hit_ground"
+to = NodePath("../../Idle")
+event = &"stopped_walking"
 delay_in_seconds = "0.0"
 
-[node name="To DoubleJump" type="Node" parent="StateChart/Root/AirState/Fall"]
+[node name="ToRun" type="Node" parent="StateChart/Movement/Walk"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Run")
+event = &"started_running"
+delay_in_seconds = "0.0"
+
+[node name="ToFall" type="Node" parent="StateChart/Movement/Walk"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Fall")
+event = &"started_falling"
+delay_in_seconds = "0.0"
+
+[node name="ToJump" type="Node" parent="StateChart/Movement/Walk"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Jump")
+event = &"jumped"
+delay_in_seconds = "0.0"
+
+[node name="Run" type="Node" parent="StateChart/Movement"]
+script = ExtResource("6_sm5rv")
+
+[node name="ToIdle" type="Node" parent="StateChart/Movement/Run"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Idle")
+event = &"stopped_walking"
+delay_in_seconds = "0.0"
+
+[node name="ToWalk" type="Node" parent="StateChart/Movement/Run"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Walk")
+event = &"stopped_running"
+delay_in_seconds = "0.0"
+
+[node name="ToFall" type="Node" parent="StateChart/Movement/Run"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Fall")
+event = &"started_falling"
+delay_in_seconds = "0.0"
+
+[node name="ToJump" type="Node" parent="StateChart/Movement/Run"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Jump")
+event = &"jumped"
+delay_in_seconds = "0.0"
+
+[node name="Fall" type="Node" parent="StateChart/Movement"]
+script = ExtResource("6_sm5rv")
+
+[node name="ToIdle" type="Node" parent="StateChart/Movement/Fall"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Idle")
+event = &"landed"
+delay_in_seconds = "0.0"
+
+[node name="ToDoubleJump" type="Node" parent="StateChart/Movement/Fall"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../DoubleJump")
 event = &"jumped"
 delay_in_seconds = "0.0"
 
-[node name="Jump" type="Node" parent="StateChart/Root/AirState"]
+[node name="Jump" type="Node" parent="StateChart/Movement"]
 script = ExtResource("6_sm5rv")
 
-[node name="To Ground" type="Node" parent="StateChart/Root/AirState/Jump"]
+[node name="ToIdle" type="Node" parent="StateChart/Movement/Jump"]
 script = ExtResource("7_6rya2")
-to = NodePath("../../Ground")
-event = &"hit_ground"
+to = NodePath("../../Idle")
+event = &"landed"
 delay_in_seconds = "0.0"
 
-[node name="To DoubleJump" type="Node" parent="StateChart/Root/AirState/Jump"]
+[node name="ToDoubleJump" type="Node" parent="StateChart/Movement/Jump"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../DoubleJump")
 event = &"jumped"
 delay_in_seconds = "0.0"
 
-[node name="DoubleJump" type="Node" parent="StateChart/Root/AirState"]
+[node name="DoubleJump" type="Node" parent="StateChart/Movement"]
 script = ExtResource("6_sm5rv")
 
-[node name="To Ground" type="Node" parent="StateChart/Root/AirState/DoubleJump"]
+[node name="ToIdle" type="Node" parent="StateChart/Movement/DoubleJump"]
 script = ExtResource("7_6rya2")
-to = NodePath("../../Ground")
-event = &"hit_ground"
+to = NodePath("../../Idle")
+event = &"landed"
 delay_in_seconds = "0.0"
 
 [node name="DebugMenu" type="CanvasLayer" parent="."]
@@ -152,15 +165,17 @@ grow_horizontal = 1
 grow_vertical = 1
 initial_node_to_watch = NodePath("../../StateChart")
 
-[connection signal="state_physics_processing" from="StateChart/Root/GroundState/Idle" to="." method="_on_idle_state_physics_processing"]
-[connection signal="state_physics_processing" from="StateChart/Root/GroundState/Walk" to="." method="_on_walk_state_physics_processing"]
-[connection signal="state_physics_processing" from="StateChart/Root/GroundState/Run" to="." method="_on_run_state_physics_processing"]
-[connection signal="state_physics_processing" from="StateChart/Root/AirState/Ground" to="." method="_on_ground_state_physics_processing"]
-[connection signal="state_unhandled_input" from="StateChart/Root/AirState/Ground" to="." method="_on_ground_state_unhandled_input"]
-[connection signal="state_physics_processing" from="StateChart/Root/AirState/Fall" to="." method="_on_fall_state_physics_processing"]
-[connection signal="state_unhandled_input" from="StateChart/Root/AirState/Fall" to="." method="_on_fall_state_unhandled_input"]
-[connection signal="state_entered" from="StateChart/Root/AirState/Jump" to="." method="_on_jump_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/AirState/Jump" to="." method="_on_jump_state_physics_processing"]
-[connection signal="state_unhandled_input" from="StateChart/Root/AirState/Jump" to="." method="_on_jump_state_unhandled_input"]
-[connection signal="state_entered" from="StateChart/Root/AirState/DoubleJump" to="." method="_on_double_jump_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/AirState/DoubleJump" to="." method="_on_double_jump_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Movement/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Movement/Idle" to="." method="_on_idle_state_physics_processing"]
+[connection signal="state_unhandled_input" from="StateChart/Movement/Idle" to="." method="_on_idle_state_unhandled_input"]
+[connection signal="state_physics_processing" from="StateChart/Movement/Walk" to="." method="_on_walk_state_physics_processing"]
+[connection signal="state_unhandled_input" from="StateChart/Movement/Walk" to="." method="_on_walk_state_unhandled_input"]
+[connection signal="state_physics_processing" from="StateChart/Movement/Run" to="." method="_on_run_state_physics_processing"]
+[connection signal="state_unhandled_input" from="StateChart/Movement/Run" to="." method="_on_run_state_unhandled_input"]
+[connection signal="state_physics_processing" from="StateChart/Movement/Fall" to="." method="_on_fall_state_physics_processing"]
+[connection signal="state_unhandled_input" from="StateChart/Movement/Fall" to="." method="_on_fall_state_unhandled_input"]
+[connection signal="state_entered" from="StateChart/Movement/Jump" to="." method="_on_jump_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Movement/Jump" to="." method="_on_jump_state_physics_processing"]
+[connection signal="state_unhandled_input" from="StateChart/Movement/Jump" to="." method="_on_jump_state_unhandled_input"]
+[connection signal="state_entered" from="StateChart/Movement/DoubleJump" to="." method="_on_double_jump_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Movement/DoubleJump" to="." method="_on_double_jump_state_physics_processing"]
