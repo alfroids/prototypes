@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cppb5sf5mqqtt"
-path="res://.godot/imported/idle.png-76b56d3e4788d23c8c71f49dc9a5c988.ctex"
+uid="uid://304fg4neh3bm"
+path="res://.godot/imported/prototype_character.png-05199a05bf48a51f8517e29beb5f10a4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://platformer_player_controller/spritesheets/idle.png"
-dest_files=["res://.godot/imported/idle.png-76b56d3e4788d23c8c71f49dc9a5c988.ctex"]
+source_file="res://platformer_player_controller/prototype_character.png"
+dest_files=["res://.godot/imported/prototype_character.png-05199a05bf48a51f8517e29beb5f10a4.ctex"]
 
 [params]
 

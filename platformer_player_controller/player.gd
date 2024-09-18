@@ -6,10 +6,18 @@ extends CharacterBody2D
 @export var jump_speed: float = 400.0
 @export var airborne_speed: float = 200.0
 @export var acceleration: float = 1200.0
-@export var friction: float = 1600.0
+@export var friction: float = 2400.0
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var state_chart: StateChart = $StateChart as StateChart
+@onready var sprite_2d: Sprite2D = $Sprite2D as Sprite2D
+
+
+func _physics_process(_delta: float) -> void:
+	if velocity.x > 0:
+		sprite_2d.flip_h = false
+	elif velocity.x < 0:
+		sprite_2d.flip_h = true
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -35,17 +43,6 @@ func handle_grounded_movement(speed: float, delta: float) -> void:
 
 	if not is_on_floor():
 		state_chart.send_event(&"started_falling")
-
-
-func handle_airborne_movement(delta: float) -> void:
-	var input: float = Input.get_axis(&"move_left", &"move_right")
-	velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
-	move_and_slide()
-
-	velocity.y += delta * gravity
-
-	if is_on_floor():
-		state_chart.send_event(&"landed")
 
 
 # IDLE STATE
@@ -79,10 +76,22 @@ func _on_run_state_physics_processing(delta: float) -> void:
 	handle_grounded_movement(run_speed, delta)
 
 
-# FALL STATE
+# AIRBORNE STATE
 
 func _on_airborne_state_physics_processing(delta: float) -> void:
-	handle_airborne_movement(delta)
+	var input: float = Input.get_axis(&"move_left", &"move_right")
+
+	if input * velocity.x > airborne_speed:
+		velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration / 4)
+	else:
+		velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
+
+	move_and_slide()
+
+	velocity.y += delta * gravity
+
+	if is_on_floor():
+		state_chart.send_event(&"landed")
 
 
 # JUMP STATE

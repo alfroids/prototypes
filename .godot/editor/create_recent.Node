@@ -1,8 +1,9 @@
+AnimationPlayerState
+AnimationPlayer
 PointLight2D
 CanvasLayer
 Control
 StateChart
-AnimationPlayer
 AnimationTree
 Camera2D
 CollisionShape2D

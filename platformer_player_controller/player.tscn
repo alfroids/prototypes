@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2wmbvatvls8e"]
+[gd_scene load_steps=15 format=3 uid="uid://b2wmbvatvls8e"]
 
-[ext_resource type="Texture2D" uid="uid://cppb5sf5mqqtt" path="res://platformer_player_controller/spritesheets/idle.png" id="1_h8trg"]
 [ext_resource type="Script" path="res://platformer_player_controller/player.gd" id="1_y5p2u"]
+[ext_resource type="Texture2D" uid="uid://304fg4neh3bm" path="res://platformer_player_controller/prototype_character.png" id="2_00tmc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="3_sjc15"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_tgj37"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/animation_player_state.gd" id="5_vcg23"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_sm5rv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_6rya2"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="8_flhtt"]
@@ -11,15 +12,95 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hhecm"]
 size = Vector2(10, 29)
 
+[sub_resource type="Animation" id="Animation_w1nlb"]
+resource_name = "idle"
+length = 0.90001
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 7), Vector2i(1, 7), Vector2i(2, 7), Vector2i(3, 7), Vector2i(4, 7), Vector2i(5, 7), Vector2i(6, 7), Vector2i(7, 7), Vector2i(8, 7), Vector2i(9, 7)]
+}
+
+[sub_resource type="Animation" id="Animation_bsmk4"]
+resource_name = "walk"
+length = 0.80001
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 22), Vector2i(1, 22), Vector2i(2, 22), Vector2i(3, 22), Vector2i(4, 22), Vector2i(5, 22), Vector2i(6, 22), Vector2i(7, 22)]
+}
+
+[sub_resource type="Animation" id="Animation_vpuj5"]
+resource_name = "run"
+length = 0.80001
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 18), Vector2i(1, 18), Vector2i(2, 18), Vector2i(3, 18), Vector2i(4, 18), Vector2i(5, 18), Vector2i(6, 18), Vector2i(7, 18)]
+}
+
+[sub_resource type="Animation" id="Animation_7cs26"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 7)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lsgon"]
+_data = {
+"RESET": SubResource("Animation_7cs26"),
+"idle": SubResource("Animation_w1nlb"),
+"run": SubResource("Animation_vpuj5"),
+"walk": SubResource("Animation_bsmk4")
+}
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_y5p2u")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_h8trg")
+texture = ExtResource("2_00tmc")
 hframes = 10
+vframes = 25
+frame = 70
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_hhecm")
 
@@ -31,7 +112,9 @@ script = ExtResource("5_tgj37")
 initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateChart/Movement"]
-script = ExtResource("6_sm5rv")
+script = ExtResource("5_vcg23")
+animation_player = NodePath("../../../AnimationPlayer")
+animation_name = &"idle"
 
 [node name="ToWalk" type="Node" parent="StateChart/Movement/Idle"]
 script = ExtResource("7_6rya2")
@@ -58,7 +141,9 @@ event = &"jumped"
 delay_in_seconds = "0.0"
 
 [node name="Walk" type="Node" parent="StateChart/Movement"]
-script = ExtResource("6_sm5rv")
+script = ExtResource("5_vcg23")
+animation_player = NodePath("../../../AnimationPlayer")
+animation_name = &"walk"
 
 [node name="ToIdle" type="Node" parent="StateChart/Movement/Walk"]
 script = ExtResource("7_6rya2")
@@ -85,7 +170,9 @@ event = &"jumped"
 delay_in_seconds = "0.0"
 
 [node name="Run" type="Node" parent="StateChart/Movement"]
-script = ExtResource("6_sm5rv")
+script = ExtResource("5_vcg23")
+animation_player = NodePath("../../../AnimationPlayer")
+animation_name = &"run"
 
 [node name="ToIdle" type="Node" parent="StateChart/Movement/Run"]
 script = ExtResource("7_6rya2")
@@ -155,6 +242,11 @@ delay_in_seconds = "0.0"
 
 [node name="DoubleJump" type="Node" parent="StateChart/Movement/Airborne"]
 script = ExtResource("6_sm5rv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lsgon")
+}
 
 [node name="DebugMenu" type="CanvasLayer" parent="."]
 visible = false
