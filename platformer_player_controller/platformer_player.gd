@@ -34,7 +34,7 @@ func handle_grounded_movement(speed: float, delta: float) -> void:
 		state_chart.send_event(&"stopped_walking")
 		return
 
-	if input * velocity.x < 0:
+	if input * velocity.x <= 0:
 		velocity.x = move_toward(velocity.x, input * speed, delta * friction)
 	else:
 		velocity.x = move_toward(velocity.x, input * speed, delta * acceleration)

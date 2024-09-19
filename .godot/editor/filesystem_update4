@@ -1,2 +1,7 @@
-res://platformer_player_controller/player.tscn
-res://platformer_player_controller/player.gd
+res://floating_player_controller/player.tscn
+res://floating_player_controller/player.gd
+res://test_scene.tscn
+res://platformer_player_controller/platformer_player.tscn
+res://floating_player_controller/floating_player.tscn
+res://floating_player_controller/floating_player.gd
+res://platformer_player_controller/platformer_player.gd
