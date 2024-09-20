@@ -10,6 +10,7 @@ extends CharacterBody2D
 
 @onready var sprite_2d: Sprite2D = $Sprite2D as Sprite2D
 @onready var state_chart: StateChart = $StateChart as StateChart
+@onready var dash_cooldown_timer: Timer = $DashCooldownTimer as Timer
 @onready var dash_direction: Vector2 = Vector2.ZERO
 
 
@@ -37,11 +38,11 @@ func _on_move_state_physics_processing(delta: float) -> void:
 		else:
 			velocity = velocity.move_toward(Vector2.ZERO, delta * drag)
 
-	if not velocity:
+	if not velocity and not input:
 		state_chart.send_event(&"stopped_moving")
 
 	else:
-		if Input.is_action_just_pressed(&"jump"):
+		if Input.is_action_just_pressed(&"jump") and dash_cooldown_timer.is_stopped():
 			state_chart.send_event(&"started_dashing")
 			return
 
@@ -56,6 +57,10 @@ func _on_dash_state_entered() -> void:
 	var x: int = 1 if dash_direction.x > 0 else 2 if dash_direction.x < 0 else 0
 	var y: int = 1 if dash_direction.y < 0 else 2 if dash_direction.y > 0 else 0
 	sprite_2d.frame_coords = Vector2i(x, y)
+
+
+func _on_dash_state_exited() -> void:
+	dash_cooldown_timer.start()
 
 
 func _on_dash_state_physics_processing(delta: float) -> void:

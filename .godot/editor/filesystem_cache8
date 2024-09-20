@@ -1,5 +1,5 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1726841644
+::res://::1726864639
 icon.svg::CompressedTexture2D::3602922756613857733::1726425749::1726425758::1::::<><>::
 LICENSE.md::TextFile::-1::1726446182::0::1::::<><>::
 README.md::TextFile::-1::1726446182::0::1::::<><>::
@@ -113,13 +113,13 @@ texture_rect_with_animation_player.gd::GDScript::-1::1726510536::0::1::::<><>::
 _.gd::GDScript::-1::1726510536::0::1::::<>RefCounted<>::
 grid_based.gd::GDScript::-1::1726510536::0::1::::<><>::
 packed.gd::GDScript::-1::1726510536::0::1::::<><>::
-::res://floating_player_controller/::1726784684
-floating_player.gd::GDScript::-1::1726784654::0::1::::<>CharacterBody2D<>::
-floating_player.tscn::PackedScene::5558296856787143483::1726784684::0::1::::<><>::res://floating_player_controller/floating_player.gd<>uid://dbkq3c5nxrv5y::::res://floating_player_controller/godot_8d_movement.png
+::res://floating_player_controller/::1726850359
+floating_player.gd::GDScript::-1::1726850359::0::1::::<>CharacterBody2D<>::
+floating_player.tscn::PackedScene::5558296856787143483::1726850359::0::1::::<><>::res://floating_player_controller/floating_player.gd<>uid://dbkq3c5nxrv5y::::res://floating_player_controller/godot_8d_movement.png<>res://addons/godot_state_charts/state_chart.gd<>res://addons/godot_state_charts/compound_state.gd<>res://addons/godot_state_charts/atomic_state.gd<>res://addons/godot_state_charts/transition.gd
 godot_8d_movement.png::CompressedTexture2D::7251116298384456320::1726776822::1726783919::1::::<><>::
-::res://platformer_player_controller/::1726706176
+::res://platformer_player_controller/::1726842497
 platformer_player.gd::GDScript::-1::1726706176::0::1::::<>CharacterBody2D<>::
-platformer_player.tscn::PackedScene::4327667266098536374::1726705808::0::1::::<><>::res://platformer_player_controller/platformer_player.gd<>uid://304fg4neh3bm::::res://platformer_player_controller/prototype_character.png<>res://addons/godot_state_charts/state_chart.gd<>res://addons/godot_state_charts/compound_state.gd<>res://addons/godot_state_charts/animation_player_state.gd<>res://addons/godot_state_charts/atomic_state.gd<>res://addons/godot_state_charts/transition.gd<>uid://bcwkugn6v3oy7::::res://addons/godot_state_charts/utilities/state_chart_debugger.tscn
+platformer_player.tscn::PackedScene::4327667266098536374::1726842497::0::1::::<><>::res://platformer_player_controller/platformer_player.gd<>uid://304fg4neh3bm::::res://platformer_player_controller/prototype_character.png<>res://addons/godot_state_charts/state_chart.gd<>res://addons/godot_state_charts/compound_state.gd<>res://addons/godot_state_charts/animation_player_state.gd<>res://addons/godot_state_charts/atomic_state.gd<>res://addons/godot_state_charts/transition.gd<>uid://bcwkugn6v3oy7::::res://addons/godot_state_charts/utilities/state_chart_debugger.tscn
 prototype_character.png::CompressedTexture2D::2018667148011895414::1726692800::1726692806::1::::<><>::
 ::res://prototype_tile_map/::1726510432
 PrototypeTilemap32x32.png::CompressedTexture2D::8241151145553790237::1726510322::1726510432::1::::<><>::

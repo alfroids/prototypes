@@ -1,3 +1,5 @@
+CanvasLayer
+Timer
 StateChart
 AnimationTree
 CollisionShape2D
@@ -6,7 +8,6 @@ CharacterBody2D
 AnimationPlayerState
 AnimationPlayer
 PointLight2D
-CanvasLayer
 Control
 Camera2D
 TileMapLayer
