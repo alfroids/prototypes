@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var airborne_speed: float = 200.0
 @export var acceleration: float = 1200.0
 @export var friction: float = 2400.0
+@export var on_jump_gravity_multiplier: float = 0.75
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var state_chart: StateChart = $StateChart as StateChart
@@ -24,7 +25,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"run"):
 		state_chart.send_event(&"started_running")
 	elif event.is_action_pressed(&"jump"):
-		state_chart.send_event(&"jumped")
+		state_chart.send_event(&"pressed_jump")
+	elif event.is_action_released(&"jump"):
+		state_chart.send_event(&"released_jump")
 
 
 func handle_grounded_movement(speed: float, delta: float) -> void:
@@ -86,6 +89,9 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, input * airborne_speed, delta * acceleration)
 
+	if velocity.y > 0:
+		state_chart.send_event(&"started_falling")
+
 	move_and_slide()
 
 	velocity.y += delta * gravity
@@ -98,9 +104,8 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 
 func _on_jump_state_entered() -> void:
 	velocity.y = -jump_speed
+	gravity *= on_jump_gravity_multiplier
 
 
-# DOUBLE JUMP STATE
-
-func _on_double_jump_state_entered() -> void:
-	velocity.y = -jump_speed
+func _on_jump_state_exited() -> void:
+	gravity /= on_jump_gravity_multiplier

@@ -137,7 +137,7 @@ delay_in_seconds = "0.0"
 [node name="ToJump" type="Node" parent="StateChart/Movement/Idle"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Airborne/Jump")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="Walk" type="Node" parent="StateChart/Movement"]
@@ -166,7 +166,7 @@ delay_in_seconds = "0.0"
 [node name="ToJump" type="Node" parent="StateChart/Movement/Walk"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Airborne/Jump")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="Run" type="Node" parent="StateChart/Movement"]
@@ -195,7 +195,7 @@ delay_in_seconds = "0.0"
 [node name="ToJump" type="Node" parent="StateChart/Movement/Run"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Airborne/Jump")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="Airborne" type="Node" parent="StateChart/Movement"]
@@ -208,13 +208,22 @@ to = NodePath("../../Idle")
 event = &"landed"
 delay_in_seconds = "0.0"
 
+[node name="FreeFall" type="Node" parent="StateChart/Movement/Airborne"]
+script = ExtResource("6_sm5rv")
+
+[node name="ToJumpBuffer" type="Node" parent="StateChart/Movement/Airborne/FreeFall"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../JumpBuffer")
+event = &"pressed_jump"
+delay_in_seconds = "0.0"
+
 [node name="Fall" type="Node" parent="StateChart/Movement/Airborne"]
 script = ExtResource("6_sm5rv")
 
 [node name="ToDoubleJump" type="Node" parent="StateChart/Movement/Airborne/Fall"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../DoubleJump")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="CoyoteTime" type="Node" parent="StateChart/Movement/Airborne"]
@@ -228,33 +237,57 @@ delay_in_seconds = "0.1"
 [node name="ToJump" type="Node" parent="StateChart/Movement/Airborne/CoyoteTime"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../Jump")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="Jump" type="Node" parent="StateChart/Movement/Airborne"]
 script = ExtResource("6_sm5rv")
 
+[node name="ToFall" type="Node" parent="StateChart/Movement/Airborne/Jump"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Fall")
+event = &"started_falling"
+delay_in_seconds = "0.0"
+
+[node name="ToFall2" type="Node" parent="StateChart/Movement/Airborne/Jump"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../Fall")
+event = &"released_jump"
+delay_in_seconds = "0.0"
+
 [node name="ToDoubleJump" type="Node" parent="StateChart/Movement/Airborne/Jump"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../DoubleJump")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="DoubleJump" type="Node" parent="StateChart/Movement/Airborne"]
 script = ExtResource("6_sm5rv")
 
+[node name="ToFreeFall" type="Node" parent="StateChart/Movement/Airborne/DoubleJump"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../FreeFall")
+event = &"started_falling"
+delay_in_seconds = "0.0"
+
+[node name="ToFreeFall2" type="Node" parent="StateChart/Movement/Airborne/DoubleJump"]
+script = ExtResource("7_6rya2")
+to = NodePath("../../FreeFall")
+event = &"released_jump"
+delay_in_seconds = "0.0"
+
 [node name="ToJumpBuffer" type="Node" parent="StateChart/Movement/Airborne/DoubleJump"]
 script = ExtResource("7_6rya2")
 to = NodePath("../../JumpBuffer")
-event = &"jumped"
+event = &"pressed_jump"
 delay_in_seconds = "0.0"
 
 [node name="JumpBuffer" type="Node" parent="StateChart/Movement/Airborne"]
 script = ExtResource("6_sm5rv")
 
-[node name="ToFall" type="Node" parent="StateChart/Movement/Airborne/JumpBuffer"]
+[node name="ToFreeFall" type="Node" parent="StateChart/Movement/Airborne/JumpBuffer"]
 script = ExtResource("7_6rya2")
-to = NodePath("../../Fall")
+to = NodePath("../../FreeFall")
 delay_in_seconds = "0.15"
 
 [node name="ToJump" type="Node" parent="StateChart/Movement/Airborne/JumpBuffer"]
@@ -269,7 +302,6 @@ libraries = {
 }
 
 [node name="DebugMenu" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="StateChartDebugger" parent="DebugMenu" instance=ExtResource("8_flhtt")]
 anchors_preset = 0
@@ -286,4 +318,6 @@ initial_node_to_watch = NodePath("../../StateChart")
 [connection signal="state_physics_processing" from="StateChart/Movement/Run" to="." method="_on_run_state_physics_processing"]
 [connection signal="state_physics_processing" from="StateChart/Movement/Airborne" to="." method="_on_airborne_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Movement/Airborne/Jump" to="." method="_on_jump_state_entered"]
-[connection signal="state_entered" from="StateChart/Movement/Airborne/DoubleJump" to="." method="_on_double_jump_state_entered"]
+[connection signal="state_exited" from="StateChart/Movement/Airborne/Jump" to="." method="_on_jump_state_exited"]
+[connection signal="state_entered" from="StateChart/Movement/Airborne/DoubleJump" to="." method="_on_jump_state_entered"]
+[connection signal="state_exited" from="StateChart/Movement/Airborne/DoubleJump" to="." method="_on_jump_state_exited"]

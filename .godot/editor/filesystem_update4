@@ -1,5 +1,3 @@
-res://floating_player_controller/floating_player.gd
-res://floating_player_controller/floating_player.tscn
-res://test_scene.tscn
 res://platformer_player_controller/platformer_player.tscn
-res://test_scene.gd
+res://platformer_player_controller/platformer_player.gd
+res://test_scene/test_scene.tscn
