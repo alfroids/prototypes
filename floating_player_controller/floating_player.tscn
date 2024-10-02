@@ -1,12 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://clgqlp0q7xll8"]
+[gd_scene load_steps=11 format=3 uid="uid://clgqlp0q7xll8"]
 
 [ext_resource type="Script" path="res://floating_player_controller/floating_player.gd" id="1_aprel"]
+[ext_resource type="Shader" path="res://shaders/pixel_outline.gdshader" id="2_5dlbl"]
 [ext_resource type="Texture2D" uid="uid://dbkq3c5nxrv5y" path="res://floating_player_controller/godot_8d_movement.png" id="2_ujtyb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="3_8volu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_7jlfm"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_vs06m"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="6_b1xy3"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="7_nd2d5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lvcem"]
+shader = ExtResource("2_5dlbl")
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ttet7"]
 radius = 16.0
@@ -17,6 +23,7 @@ motion_mode = 1
 script = ExtResource("1_aprel")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_lvcem")
 texture = ExtResource("2_ujtyb")
 hframes = 3
 vframes = 3
