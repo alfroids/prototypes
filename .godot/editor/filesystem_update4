@@ -1,10 +1,9 @@
-res://test_scene/test_scene.tscn
+res://walking_animation/walking_animation.tscn
 res://shaders/tile_highlight_on_hover.gdshader
 res://shaders/blink.gdshader
 res://shaders/dissolve.gdshader
 res://shaders/scanline.gdshader
 res://shaders/pixel_outline.gdshader
-res://prototype_tile_map/prototype_tile_map.gd
-res://prototype_tile_map/prototype_tile_map.tscn
-res://floating_player_controller/floating_player.tscn
 res://shaders/outline.gdshader
+res://test_scene/test_scene.tscn
+res://walking_animation/walking_animation.gd
